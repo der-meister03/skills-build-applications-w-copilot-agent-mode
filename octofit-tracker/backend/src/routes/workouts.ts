@@ -3,6 +3,16 @@ import Workout from '../models/Workout';
 
 const router = express.Router();
 
+// Get all workouts (activities)
+router.get('/', async (_req: Request, res: Response) => {
+  try {
+    const workouts = await Workout.find().sort({ date: -1 });
+    res.json(workouts);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Create a new workout
 router.post('/', async (req: Request, res: Response) => {
   try {
