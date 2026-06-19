@@ -1,12 +1,13 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import { connectOctoFitDB, disconnectOctoFitDB } from './database';
 import User from './models/User';
 import Workout from './models/Workout';
 import Goal from './models/Goal';
 
-dotenv.config();
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit-tracker';
+/**
+ * OctoFit Test Data Seed Script
+ * Populates the octofit_db database with sample users, workouts, and goals
+ * for development and testing purposes
+ */
 
 const sampleUsers = [
   {
@@ -108,16 +109,6 @@ const sampleGoals = [
   },
 ];
 
-async function connectDB() {
-  try {
-    await mongoose.connect(MONGODB_URI);
-    console.log('✅ MongoDB connected successfully');
-  } catch (error) {
-    console.error('❌ MongoDB connection failed:', error);
-    process.exit(1);
-  }
-}
-
 async function populateDatabase() {
   try {
     // Clear existing data
@@ -144,7 +135,7 @@ async function populateDatabase() {
       userId: createdUsers[0]._id.toString(),
     }));
     const createdGoals = await Goal.insertMany(goalsWithUserId);
-    console.log(`🎯 Created ${createdGoals.length} sample goals`);
+    console.log(`🏁 Created ${createdGoals.length} sample goals`);
 
     console.log('\n📊 Sample Data Summary:');
     console.log('Users:');
@@ -169,10 +160,9 @@ async function populateDatabase() {
 }
 
 async function main() {
-  await connectDB();
+  await connectOctoFitDB();
   await populateDatabase();
-  await mongoose.disconnect();
-  console.log('📴 Database connection closed');
+  await disconnectOctoFitDB();
 }
 
 main();
