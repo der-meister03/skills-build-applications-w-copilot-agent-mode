@@ -1,12 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-function getApiBaseUrl() {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
-  return codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api';
-}
-
 function normalizeListResponse(payload) {
   if (Array.isArray(payload)) return payload;
   if (!payload || typeof payload !== 'object') return [];
@@ -22,7 +15,12 @@ function Leaderboard() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const endpoint = useMemo(() => `${getApiBaseUrl()}/leaderboard/`, []);
+  const endpoint = useMemo(() => {
+    const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+    return codespaceName
+      ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+      : 'http://localhost:8000/api/leaderboard/';
+  }, []);
 
   useEffect(() => {
     async function loadLeaderboard() {
