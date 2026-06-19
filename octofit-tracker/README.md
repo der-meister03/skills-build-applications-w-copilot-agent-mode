@@ -28,6 +28,24 @@ npm run dev
 
 The frontend will be available at `http://localhost:5173`
 
+### Frontend Environment Variables
+
+Create `octofit-tracker/frontend/.env.local` and define:
+
+```bash
+VITE_CODESPACE_NAME=your-codespace-name
+```
+
+The presentation tier builds API URLs as:
+
+`https://${VITE_CODESPACE_NAME}-8000.app.github.dev/api/[component]/`
+
+If `VITE_CODESPACE_NAME` is not set, the app safely falls back to:
+
+`http://localhost:8000/api/[component]/`
+
+This prevents malformed URLs like `https://undefined-8000.app.github.dev`.
+
 ### Backend Setup
 
 ```bash
